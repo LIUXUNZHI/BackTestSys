@@ -11,6 +11,7 @@ def realized_vol(date_n):
     rv = np.sqrt((df.pct_change()**2).sum() * 252)
     return rv.iloc[0] * 100
 
+
 def _cal_ivol(df_nm, expire_date):
     NT = expire_date * 240
     T = NT / (365 * 240)

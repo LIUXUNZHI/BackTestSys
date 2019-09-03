@@ -6,8 +6,8 @@ from DataBaseFun.DBInteract import *
 from OptionTool.OptionMgr import *
 from Strategys.vixStra import *
 from Strategys.Order import *
-
 import datetime
+
 class StrategyBase:
     def __init__(self, strategy_id):
         self._stra_id = strategy_id
@@ -15,15 +15,29 @@ class StrategyBase:
     def run(self):
         raise NotImplemented
 
+class StraMgrBase(object):
 
-class StraMgr(object):
     def __init__(self):
         self._stra_vector = []
         pass
 
     def add_strategy(self, strategy):
-        #if isinstance(strategy, StrategyBase):
+        # if isinstance(strategy, StrategyBase):
         self._stra_vector.append(strategy)
+
+    def _is_trading_time(self):
+        raise NotImplemented
+
+    def run_all_strategy(self):
+        for stra in self._stra_vector:
+            if self._is_trading_time():
+                stra.run()
+
+
+class OptStraMgr(StraMgrBase):
+
+    def __init__(self):
+        super().__init__()
 
     def _is_trading_time(self):
         hour = datetime.datetime.now().time().hour
@@ -36,10 +50,27 @@ class StraMgr(object):
         else:
             return False
 
-    def run_all_strategy(self):
-        for stra in self._stra_vector:
-            if self._is_trading_time():
-                stra.run()
+
+class FutureStraMgr(object):
+    def __init__(self):
+        super().__init__()
+
+    def _is_trading_time(self):
+        hour = datetime.datetime.now().time().hour
+        min = datetime.datetime.now().time().minute
+        t = hour * 10000 + min * 100
+        if t > 90000 and t < 1015000:   # 不要在靠近收盘时刻下 TWAP 单
+            return True
+        elif t > 103000 and t < 113000:  # 总体交易时间 策略可以自行锁定交易时间
+            return True
+        elif t > 133000 and t < 145600:
+            return True
+        elif t > 210000 and t <= 235959:
+            return True
+        elif t < 23000:
+            return True
+        else:
+            return False
 
 
 class Stra01(StrategyBase):
@@ -51,10 +82,10 @@ class Stra01(StrategyBase):
 
     def run(self):
         print("use stra01 signal")
-        code = get_trading_code(0, 1)
-        slow = get_last_min(code, 11)
-        fast = get_last_min(code, 6)
-        code_info = get_inst_info(code)
+        code = get_opt_trading_code(0, 1)
+        slow = get_last_opt_min(code, 11)
+        fast = get_last_opt_min(code, 6)
+        code_info = get_opt_inst_info(code)
         etf = get_last_etf_min()
         last_etf = etf['sClose'].values[0]
         last_opt = fast['sClose'].values[0]
@@ -63,7 +94,7 @@ class Stra01(StrategyBase):
         slow_ma = slow['sClose'].rolling(10).mean().dropna()
         fast_ma = fast['sClose'].rolling(5).mean().dropna()
 
-        pos = get_my_pos(self._code, self._stra_id)
+        pos = get_my_opt_pos(self._code, self._stra_id)
         print("LONG: ")
         print(pos['FilledLong'].iloc[0])
         print("SHORT: ")
@@ -99,7 +130,7 @@ class Stra02(StrategyBase):
 if __name__ == "__main__":
     x = VixStra(703, 60)
     #x = Stra02(7002, 20)
-    mgr = StraMgr()
+    mgr = OptStraMgr()
     mgr.add_strategy(x)
     # mgr.add_strategy(y)
     from time import sleep
