@@ -87,10 +87,10 @@ def update_today_data(info):
     return df
 
 if __name__ == "__main__":
-    opt_inst = get_today_inst()
+    #opt_inst = get_today_inst()
     future_inst = get_today_future_inst()
     #y = get_today_data(x.values[0][0])
-    for inst in opt_inst.values:
-        update_today_data(inst)
+    #for inst in opt_inst.values:
+     #   update_today_data(inst)
     for inst in future_inst.values:
         update_today_future_data(inst[0])

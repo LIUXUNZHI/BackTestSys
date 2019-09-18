@@ -72,8 +72,8 @@ def send_future_order(code, price, vol, is_open, orderID, straID, **kwargs):
 
 
 if __name__ == "__main__":
-    send_future_order('cu1910', BEST_PRICE, 5,
-              True, 4, 703, method="TWAP", batch=2, interval=10)
+    send_future_order('cu1910', BEST_PRICE, -5,
+              False, 4, 703, method="TWAP", batch=2, interval=10)
     #send_order('10001895', BEST_PRICE, -50,
                #False, 4, 703, method="TWAP", batch=5, interval=10)
 '''

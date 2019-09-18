@@ -124,11 +124,12 @@ class Stra02(StrategyBase):
         super().__init__(strategy_id)
 
     def run(self):
+
         print("use stra02 signal")
 
 
 if __name__ == "__main__":
-    x = VixStra(703, 60)
+    x = VixStra(703, 60, 1296000)
     #x = Stra02(7002, 20)
     mgr = OptStraMgr()
     mgr.add_strategy(x)
