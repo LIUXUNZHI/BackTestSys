@@ -1,7 +1,5 @@
-from StraMgr.StraMgr2 import StrategyBase
-from DataBaseFun.DBInteract import *
-from Strategys.Order import *
-from OptionTool.OptionMgr import *
+from Trading.StraMgr.StraMgr2 import StrategyBase
+from ToolBox.DataBaseFun.DBInteract import *
 import datetime
 
 

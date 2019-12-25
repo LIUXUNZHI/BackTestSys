@@ -1,5 +1,6 @@
-from OptionTool.OptionMgr import *
-import pandas as pd
+from ToolBox.OptionTool.OptionMgr import *
+
+
 class PNLNode:
     def __init__(self, price, vol, is_open, is_long, tradetime, **kwargs):
         self.filled_price = price
@@ -217,13 +218,13 @@ class FuturePNLMgr(PNLMgrBase):
 
 if __name__ == "__main__":
     import pandas as pd
-    from DataBaseFun.DataBase import *
+    from ToolBox.DataBaseFun.DataBase import *
     from datetime import datetime
     today = str(datetime.today())[:10]
     posMgr = OptPNLMgr(1.6, 10000)
     SQL = "select * from TRADE where date(TradeTime)='2019-09-03'"
     df = pd.read_sql(SQL, Trading_CONN)
-    SQL2 = "SELECT * FROM INST"
+    SQL2 = "SELECT * FROM HIST_OPT_INST where date(DTime)='2019-09-03'"
     df2 = pd.read_sql(SQL2, Trading_CONN)
     for i in range(len(df)):
         this_trade = df.iloc[i]

@@ -1,4 +1,4 @@
-from DataBaseFun.DataBase import Trading_CONN
+
 import WindPy as win
 
 win.w.start()

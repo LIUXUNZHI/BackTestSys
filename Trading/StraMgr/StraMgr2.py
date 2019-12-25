@@ -2,10 +2,8 @@ import sys
 #sys.path.append("../DataBaseFun")
 #sys.path.append("../Strategys")
 print(sys.path)
-from DataBaseFun.DBInteract import *
-from OptionTool.OptionMgr import *
-from Strategys.vixStra import *
-from Strategys.Order import *
+from ToolBox.OptionTool.OptionMgr import *
+from Trading.Strategys.vixStra import *
 import datetime
 
 class StrategyBase:
